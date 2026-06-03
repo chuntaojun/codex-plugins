@@ -1,0 +1,34 @@
+{
+  "name": "doc-flow",
+  "stages": [
+    {
+      "name": "write-doc",
+      "type": "codex",
+      "input": {
+        "goal": "${params.goal}"
+      },
+      "prompt": [
+        "Write a concise design document for input.goal.",
+        "Return only the document body."
+      ],
+      "output": {
+        "file": "design.md"
+      }
+    },
+    {
+      "name": "review-doc",
+      "type": "codex",
+      "dependsOn": ["write-doc"],
+      "input": {
+        "document": "${stages.write-doc.latest.outputFile}"
+      },
+      "prompt": [
+        "Review input.document.",
+        "Return concrete review feedback and a pass/fail recommendation."
+      ],
+      "output": {
+        "file": "review.json"
+      }
+    }
+  ]
+}
