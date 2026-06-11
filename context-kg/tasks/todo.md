@@ -16,7 +16,7 @@
 - [x] 新增 `.agents/plugins/marketplace.json`
 - [x] 重写英文 README 并新增中文 README
 - [x] 运行插件测试、manifest 校验和 marketplace 结构校验
-- [ ] 推送更新
+- [x] 推送更新
 - [x] 补充 Review
 
 ### Review
@@ -31,6 +31,7 @@
 - 验证通过：`plugins/codex-ultracode/scripts` 的 `npm test` 通过 128/128，`npm run typecheck` 通过。
 - 验证通过：两个插件的 `validate_plugin.py` 校验通过。
 - 验证通过：marketplace JSON 能解析，插件 entry 名称、路径、默认安装策略和 manifest 名称一致。
+- 已推送到 `chuntaojun/codex-plugins` 的 `main` 分支。
 
 ## 目标
 
