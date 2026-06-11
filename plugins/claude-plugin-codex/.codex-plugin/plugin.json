@@ -1,0 +1,34 @@
+{
+  "name": "claude",
+  "version": "0.1.0",
+  "description": "Use Claude CLI from Codex and return Claude's result to the current Codex agent.",
+  "author": {
+    "name": "Chuntao Liao"
+  },
+  "license": "MIT",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "delegation",
+    "cli"
+  ],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Claude",
+    "shortDescription": "Delegate Codex work to Claude CLI",
+    "longDescription": "Run Claude CLI from a Codex session for investigation, implementation, or review tasks, then return Claude's final result to the current Codex agent.",
+    "developerName": "Chuntao Liao",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Ask Claude to investigate this bug",
+      "Ask Claude to review the current change",
+      "Ask Claude to implement this task"
+    ],
+    "brandColor": "#D97706",
+    "screenshots": []
+  }
+}
