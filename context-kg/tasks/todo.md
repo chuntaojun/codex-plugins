@@ -11,9 +11,9 @@
 - [x] 导入 `codex-plugin-cc/`
 - [x] 导入 `codex-ultracode/`
 - [x] 验证两个子项目的基础测试或校验
-- [ ] 创建 GitHub 远端 `chuntaojun/codex-plugins`
-- [ ] 推送 `main`
-- [ ] 补充 Review
+- [x] 创建 GitHub 远端 `chuntaojun/codex-plugins`
+- [x] 推送 `main`
+- [x] 补充 Review
 
 ## Review
 
@@ -23,3 +23,5 @@
 - 导入方式：`git subtree add --prefix=...`，保留两个源项目历史并避免修改原仓库。
 - 验证通过：`codex-plugin-cc` 的 `npm test` 通过 86/86。
 - 验证通过：`codex-ultracode/scripts` 的 `npm test` 通过 128/128，`npm run typecheck` 通过。
+- 已创建 GitHub 远端：`https://github.com/chuntaojun/codex-plugins`。
+- 已推送 `main` 并设置 upstream 为 `origin/main`。
