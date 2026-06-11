@@ -1,0 +1,25 @@
+{
+  "mode": "read-only",
+  "goal": "Create a practical first-time travel guide for Kyoto.",
+  "trip": {
+    "destination": "Kyoto, Japan",
+    "durationDays": 3,
+    "season": "spring",
+    "travelers": "two adults visiting for the first time",
+    "pace": "balanced, not rushed",
+    "interests": [
+      "temples and shrines",
+      "traditional streets",
+      "local food",
+      "easy photography spots",
+      "one quieter backup route"
+    ],
+    "constraints": [
+      "avoid overpacking each day",
+      "prefer public transportation and walking",
+      "include rainy-day alternatives",
+      "avoid claiming live opening hours or ticket prices"
+    ],
+    "budgetStyle": "mid-range"
+  }
+}

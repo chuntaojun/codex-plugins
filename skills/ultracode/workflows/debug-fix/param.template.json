@@ -1,0 +1,16 @@
+{
+  "mode": "write",
+  "goal": "Debug and fix a failure.",
+  "intent": "Debug and fix a failure.",
+  "debug": {
+    "symptom": "Unspecified failure",
+    "commands": [],
+    "expectedBehavior": "The failing behavior should be corrected with the smallest scoped fix.",
+    "constraints": [
+      "reproduce or characterize the failure before editing",
+      "identify root cause before implementing",
+      "keep changes scoped",
+      "verify with relevant tests when feasible"
+    ]
+  }
+}

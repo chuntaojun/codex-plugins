@@ -21,8 +21,8 @@ pnpm-debug.log*
 # Node / frontend outputs
 node_modules/
 dist/
-!codex-ts-workflow-plugin/scripts/dist/
-!codex-ts-workflow-plugin/scripts/dist/**
+!scripts/dist/
+!scripts/dist/**
 build/
 coverage/
 *.tsbuildinfo
@@ -34,7 +34,7 @@ coverage/
 tmp/
 
 # Future runtime artifacts
-.codex-workflows/
+.ultracode/
 *.pid
 *.seed
 *.out

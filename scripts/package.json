@@ -1,0 +1,19 @@
+{
+  "name": "codex-ultracode",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "ultracode": "./run-ultracode.mjs",
+    "ultracode-mcp": "./run-mcp.mjs"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.8.0"
+  }
+}

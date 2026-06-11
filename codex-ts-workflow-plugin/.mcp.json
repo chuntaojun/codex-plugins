@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "harness-workflow": {
-      "command": "node",
-      "args": ["./scripts/run-mcp.mjs"],
-      "cwd": "."
-    }
-  }
-}

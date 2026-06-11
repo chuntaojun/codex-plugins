@@ -1,0 +1,24 @@
+{
+  "name": "codex-ultracode",
+  "version": "0.1.0+codex.20260610084106",
+  "description": "Run JSON-defined Codex workflows with a packaged Node runner that calls the codex command.",
+  "author": {
+    "name": "Local developer"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Codex Ultracode",
+    "shortDescription": "Run JSON-defined Codex workflows.",
+    "longDescription": "Provides a Codex MCP tool and skill adapter for a packaged Node workflow runner that starts stages through the environment's codex command.",
+    "developerName": "Local developer",
+    "category": "Productivity",
+    "capabilities": [
+      "Workflow",
+      "Local"
+    ],
+    "defaultPrompt": [
+      "Run a workflow with the Ultracode MCP tool."
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "mode": "read-only",
+  "goal": "Run a deep research workflow.",
+  "intent": "Run a deep research workflow.",
+  "research": {
+    "topic": "Unspecified topic",
+    "audience": "technical decision maker",
+    "depth": "deep",
+    "deliverable": "Markdown research report",
+    "constraints": [
+      "separate evidence from inference",
+      "mark time-sensitive claims that need live verification",
+      "include open questions and recommended next steps"
+    ]
+  }
+}

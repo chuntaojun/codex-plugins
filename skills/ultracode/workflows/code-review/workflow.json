@@ -1,0 +1,84 @@
+{
+  "name": "code-review",
+  "description": "Run a read-only code review workflow that scopes changes, identifies findings, and checks residual risk.",
+  "keywords": [
+    "code review",
+    "review",
+    "pull request",
+    "diff",
+    "risk",
+    "audit",
+    "代码审查",
+    "代码评审",
+    "评审",
+    "审查",
+    "变更审阅",
+    "风险"
+  ],
+  "stages": [
+    {
+      "name": "review-scope",
+      "type": "codex",
+      "input": {
+        "intent": "${params.intent}",
+        "review": "${params.review}"
+      },
+      "prompt": [
+        "Create a concise code review scope from input.intent and input.review.",
+        "Identify the likely diff target, affected areas, user-facing behavior, and verification expectations.",
+        "Use read-only inspection commands when feasible. Do not modify files.",
+        "Return Markdown only."
+      ],
+      "agent": {
+        "mode": "read-only"
+      },
+      "output": {
+        "file": "review-scope.md"
+      }
+    },
+    {
+      "name": "inspect-changes",
+      "type": "codex",
+      "dependsOn": ["review-scope"],
+      "input": {
+        "intent": "${params.intent}",
+        "review": "${params.review}",
+        "scopeFile": "${stages.review-scope.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.scopeFile, then inspect the relevant repository changes.",
+        "Prioritize bugs, regressions, correctness risks, security-sensitive behavior, and missing tests. Avoid style-only findings unless they block correctness.",
+        "Return Markdown findings ordered by severity with file references, impact, and concrete remediation.",
+        "Do not expose hidden reasoning."
+      ],
+      "agent": {
+        "mode": "read-only"
+      },
+      "output": {
+        "file": "code-review-findings.md"
+      }
+    },
+    {
+      "name": "risk-check",
+      "type": "codex",
+      "dependsOn": ["inspect-changes"],
+      "input": {
+        "intent": "${params.intent}",
+        "review": "${params.review}",
+        "findingsFile": "${stages.inspect-changes.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.findingsFile, then perform a second-pass risk check.",
+        "Look for missing tests, unverified assumptions, deployment or compatibility risks, and any false-positive findings that should be softened or removed.",
+        "Return Markdown with final recommendation, residual risk, and suggested verification commands.",
+        "Do not expose hidden reasoning."
+      ],
+      "agent": {
+        "mode": "read-only"
+      },
+      "output": {
+        "file": "code-review-risk-check.md"
+      }
+    }
+  ]
+}

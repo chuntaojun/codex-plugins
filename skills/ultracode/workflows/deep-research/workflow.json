@@ -1,0 +1,94 @@
+{
+  "name": "deep-research",
+  "description": "Run a multi-stage read-only research workflow that scopes a question, maps evidence, synthesizes findings, and reviews uncertainty.",
+  "keywords": [
+    "deep research",
+    "research",
+    "investigation",
+    "analysis",
+    "synthesis",
+    "compare",
+    "调研",
+    "深度研究",
+    "研究",
+    "分析",
+    "综合",
+    "对比"
+  ],
+  "stages": [
+    {
+      "name": "research-brief",
+      "type": "codex",
+      "input": {
+        "intent": "${params.intent}",
+        "research": "${params.research}"
+      },
+      "prompt": [
+        "Create a concise research brief from input.intent and input.research.",
+        "Define the research question, audience, scope boundaries, assumptions, and decision criteria.",
+        "List what evidence would be needed for a confident answer. Do not claim live facts unless available in the provided context or tools.",
+        "Return Markdown only."
+      ],
+      "output": {
+        "file": "research-brief.md"
+      }
+    },
+    {
+      "name": "source-map",
+      "type": "codex",
+      "dependsOn": ["research-brief"],
+      "input": {
+        "intent": "${params.intent}",
+        "research": "${params.research}",
+        "briefFile": "${stages.research-brief.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.briefFile, then map the available evidence for this research task.",
+        "Use repository files, supplied material, and available tools when feasible. Distinguish direct evidence, inference, and unknowns.",
+        "Return Markdown with evidence categories, source paths or source descriptions, confidence notes, and gaps.",
+        "Do not expose hidden reasoning."
+      ],
+      "output": {
+        "file": "source-map.md"
+      }
+    },
+    {
+      "name": "synthesize-report",
+      "type": "codex",
+      "dependsOn": ["source-map"],
+      "input": {
+        "intent": "${params.intent}",
+        "research": "${params.research}",
+        "briefFile": "${stages.research-brief.latest.outputFile}",
+        "sourceMapFile": "${stages.source-map.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.briefFile and input.sourceMapFile, then write a deep research report for input.intent.",
+        "Include executive summary, key findings, comparisons or trade-offs, evidence quality, open questions, and recommended next steps.",
+        "Separate confirmed facts from assumptions and mark time-sensitive claims that need live verification.",
+        "Return Markdown only."
+      ],
+      "output": {
+        "file": "deep-research-report.md"
+      }
+    },
+    {
+      "name": "review-research",
+      "type": "codex",
+      "dependsOn": ["synthesize-report"],
+      "input": {
+        "intent": "${params.intent}",
+        "research": "${params.research}",
+        "reportFile": "${stages.synthesize-report.latest.outputFile}"
+      },
+      "prompt": [
+        "Review input.reportFile for unsupported claims, missing counterpoints, stale assumptions, and unclear recommendations.",
+        "Return a short Markdown review with pass/fail recommendation, concrete improvements, and remaining uncertainty.",
+        "Do not expose hidden reasoning."
+      ],
+      "output": {
+        "file": "research-review.md"
+      }
+    }
+  ]
+}
