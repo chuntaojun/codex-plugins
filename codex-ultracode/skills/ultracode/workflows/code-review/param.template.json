@@ -1,0 +1,16 @@
+{
+  "mode": "read-only",
+  "goal": "Run a code review workflow.",
+  "intent": "Run a code review workflow.",
+  "review": {
+    "target": "current repository changes",
+    "base": "main",
+    "focus": [
+      "correctness",
+      "behavioral regressions",
+      "missing tests",
+      "high-impact risks"
+    ],
+    "outputStyle": "findings first, ordered by severity"
+  }
+}

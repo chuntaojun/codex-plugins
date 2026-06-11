@@ -1,0 +1,109 @@
+{
+  "name": "debug-fix",
+  "description": "Run an approval-gated debug and fix workflow that reproduces a failure, diagnoses root cause, implements a scoped fix, and verifies it.",
+  "keywords": [
+    "debug",
+    "fix",
+    "bug",
+    "failure",
+    "failing test",
+    "ci failure",
+    "root cause",
+    "regression",
+    "修复",
+    "排障",
+    "调试",
+    "失败",
+    "报错",
+    "根因",
+    "测试失败"
+  ],
+  "stages": [
+    {
+      "name": "reproduce-failure",
+      "type": "codex",
+      "input": {
+        "intent": "${params.intent}",
+        "debug": "${params.debug}"
+      },
+      "prompt": [
+        "Reproduce or characterize the failure described by input.intent and input.debug.",
+        "Inspect relevant logs, commands, tests, and repository context. Run read-only diagnostic commands when feasible.",
+        "Return Markdown with observed symptoms, reproduction steps, command output summary, and uncertain assumptions.",
+        "Do not expose hidden reasoning."
+      ],
+      "agent": {
+        "mode": "read-only"
+      },
+      "output": {
+        "file": "failure-reproduction.md"
+      }
+    },
+    {
+      "name": "diagnose-root-cause",
+      "type": "codex",
+      "dependsOn": ["reproduce-failure"],
+      "input": {
+        "intent": "${params.intent}",
+        "debug": "${params.debug}",
+        "reproductionFile": "${stages.reproduce-failure.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.reproductionFile, then identify the most likely root cause.",
+        "Tie the diagnosis to concrete files, code paths, logs, or test behavior. Avoid speculative fixes.",
+        "Return Markdown with root cause, affected surface, proposed fix, and verification commands.",
+        "Do not expose hidden reasoning."
+      ],
+      "agent": {
+        "mode": "read-only"
+      },
+      "output": {
+        "file": "root-cause-analysis.md"
+      }
+    },
+    {
+      "name": "implement-fix",
+      "type": "codex",
+      "dependsOn": ["diagnose-root-cause"],
+      "input": {
+        "intent": "${params.intent}",
+        "debug": "${params.debug}",
+        "rootCauseFile": "${stages.diagnose-root-cause.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.rootCauseFile, then implement the smallest fix that addresses the diagnosed root cause.",
+        "Keep edits scoped, follow existing repository patterns, and avoid unrelated refactors.",
+        "Return Markdown summarizing changed files, rationale, and verification attempted.",
+        "Do not expose hidden reasoning."
+      ],
+      "agent": {
+        "mode": "write"
+      },
+      "output": {
+        "file": "fix-summary.md"
+      }
+    },
+    {
+      "name": "verify-fix",
+      "type": "codex",
+      "dependsOn": ["implement-fix"],
+      "input": {
+        "intent": "${params.intent}",
+        "debug": "${params.debug}",
+        "fixSummaryFile": "${stages.implement-fix.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.fixSummaryFile, then verify the fix against input.intent.",
+        "Run relevant tests or checks when feasible, inspect failures if any, and report residual risks.",
+        "Return Markdown with verification commands, results, pass/fail recommendation, and follow-up items.",
+        "Do not expose hidden reasoning."
+      ],
+      "agent": {
+        "mode": "read-only"
+      },
+      "output": {
+        "file": "verification-report.md"
+      }
+    }
+  ]
+}

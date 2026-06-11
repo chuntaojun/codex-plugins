@@ -1,0 +1,23 @@
+{
+  "mode": "read-only",
+  "goal": "Create a practical travel guide.",
+  "intent": "Create a practical travel guide.",
+  "trip": {
+    "destination": "Unknown destination",
+    "durationDays": 3,
+    "season": "unspecified",
+    "travelers": "unspecified travelers",
+    "pace": "balanced, not rushed",
+    "interests": [
+      "local highlights",
+      "food",
+      "easy logistics"
+    ],
+    "constraints": [
+      "avoid overpacking each day",
+      "include backup options",
+      "avoid claiming live opening hours or ticket prices"
+    ],
+    "budgetStyle": "mid-range"
+  }
+}

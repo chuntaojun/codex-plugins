@@ -1,0 +1,53 @@
+import { configureTraceOutput } from "./core/events.js";
+import { type PreparedRunWorktree, type PrepareRunWorktreeOptions } from "./core/git-worktree.js";
+import { inspectWorkflowReport, inspectWorkflowStatus, inspectWorkflowTail } from "./core/inspector.js";
+import { planDynamicWorkflow } from "./dynamic-planner.js";
+import { copyApprovedDynamicPlanFile, readDynamicPlanFile, writeDynamicPlanFile } from "./dynamic-plan-file.js";
+import { type CreateDynamicWorkflowFilesOptions, type CreatedDynamicWorkflowFiles } from "./dynamic-runner.js";
+import { type JsonWorkflowRunResult, type RunJsonWorkflowOptions } from "./json-runner.js";
+import { writeApprovedNamedWorkflowFile, type CreateParamFileOptions, type CreatedParamFile, type NamedWorkflowSummary, type ResolveNamedWorkflowOptions } from "./named-workflows.js";
+import { type WorkflowStageActionOptions, type WorkflowStageActionResult, type WorkflowStageReworkOptions } from "./workflow-actions.js";
+import { getRunArtifact, listRuns, pruneRuns, type GetRunArtifactOptions, type ListRunsOptions, type PruneRunsOptions, type ResolveRunOutputDirOptions } from "./run-registry.js";
+type JsonRpcId = string | number | null;
+type JsonRpcRequest = {
+    jsonrpc?: "2.0";
+    id?: JsonRpcId;
+    method?: string;
+    params?: Record<string, unknown>;
+};
+type JsonRpcResponse = {
+    jsonrpc: "2.0";
+    id: JsonRpcId;
+    result?: unknown;
+    error?: {
+        code: number;
+        message: string;
+    };
+};
+type McpDependencies = {
+    prepareRunWorktree?: (repoRoot: string, options?: PrepareRunWorktreeOptions) => PreparedRunWorktree;
+    runJsonWorkflow?: (options: RunJsonWorkflowOptions) => Promise<JsonWorkflowRunResult>;
+    configureTraceOutput?: typeof configureTraceOutput;
+    resolveNamedWorkflow?: (workflowName: string, options?: ResolveNamedWorkflowOptions) => NamedWorkflowSummary;
+    listNamedWorkflows?: (options?: ResolveNamedWorkflowOptions) => NamedWorkflowSummary[];
+    readWorkflowReadme?: (workflow: NamedWorkflowSummary) => string | undefined;
+    planDynamicWorkflow?: typeof planDynamicWorkflow;
+    createDynamicWorkflowFiles?: (options: CreateDynamicWorkflowFilesOptions) => CreatedDynamicWorkflowFiles;
+    readDynamicPlanFile?: typeof readDynamicPlanFile;
+    writeDynamicPlanFile?: typeof writeDynamicPlanFile;
+    copyApprovedDynamicPlanFile?: typeof copyApprovedDynamicPlanFile;
+    createParamFileFromTemplate?: (options: CreateParamFileOptions) => CreatedParamFile;
+    writeApprovedNamedWorkflowFile?: typeof writeApprovedNamedWorkflowFile;
+    restartWorkflowStage?: (options: WorkflowStageActionOptions) => Promise<WorkflowStageActionResult>;
+    reworkWorkflowStage?: (options: WorkflowStageReworkOptions) => Promise<WorkflowStageActionResult>;
+    listRuns?: (options: ListRunsOptions) => ReturnType<typeof listRuns>;
+    getRunArtifact?: (options: GetRunArtifactOptions) => ReturnType<typeof getRunArtifact>;
+    pruneRuns?: (options: PruneRunsOptions) => ReturnType<typeof pruneRuns>;
+    resolveRunOutputDir?: (options: ResolveRunOutputDirOptions) => string;
+    inspectWorkflowStatus?: typeof inspectWorkflowStatus;
+    inspectWorkflowTail?: typeof inspectWorkflowTail;
+    inspectWorkflowReport?: typeof inspectWorkflowReport;
+};
+export declare function handleMcpRequest(message: JsonRpcRequest, dependencies?: McpDependencies): Promise<JsonRpcResponse | null>;
+export declare function startMcpServer(): void;
+export {};

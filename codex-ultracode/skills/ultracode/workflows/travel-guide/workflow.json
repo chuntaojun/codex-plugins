@@ -1,0 +1,73 @@
+{
+  "name": "travel-guide",
+  "description": "Create a practical travel guide and review it for feasibility, safety, pacing, and missing assumptions.",
+  "keywords": [
+    "travel",
+    "trip",
+    "itinerary",
+    "guide",
+    "travel guide",
+    "旅游",
+    "旅行",
+    "攻略",
+    "行程",
+    "京都",
+    "kyoto"
+  ],
+  "stages": [
+    {
+      "name": "plan-brief",
+      "type": "codex",
+      "input": {
+        "trip": "${params.trip}",
+        "intent": "${params.intent}"
+      },
+      "prompt": [
+        "Create a concise travel planning brief from stage-input.trip and stage-input.intent.",
+        "Focus on traveler profile, constraints, route assumptions, pacing, and must-cover planning risks.",
+        "Do not claim live opening hours, ticket prices, or real-time availability.",
+        "Return Markdown only."
+      ],
+      "output": {
+        "file": "planning-brief.md"
+      }
+    },
+    {
+      "name": "draft-itinerary",
+      "type": "codex",
+      "dependsOn": ["plan-brief"],
+      "input": {
+        "trip": "${params.trip}",
+        "intent": "${params.intent}",
+        "planningBriefFile": "${stages.plan-brief.latest.outputFile}"
+      },
+      "prompt": [
+        "Read input.planningBriefFile, then write a practical travel guide for input.trip and input.intent.",
+        "Include a day-by-day itinerary, transport notes, meal style suggestions, backup options, packing reminders, and budget bands.",
+        "Keep recommendations useful but avoid presenting time-sensitive details as verified facts.",
+        "Return Markdown only."
+      ],
+      "output": {
+        "file": "travel-guide.md"
+      }
+    },
+    {
+      "name": "review-itinerary",
+      "type": "codex",
+      "dependsOn": ["draft-itinerary"],
+      "input": {
+        "trip": "${params.trip}",
+        "intent": "${params.intent}",
+        "travelGuideFile": "${stages.draft-itinerary.latest.outputFile}"
+      },
+      "prompt": [
+        "Review input.travelGuideFile for feasibility, safety, pacing, and missing assumptions.",
+        "Return a short Markdown review with pass/fail recommendation and concrete improvements.",
+        "Do not expose hidden reasoning."
+      ],
+      "output": {
+        "file": "travel-guide-review.md"
+      }
+    }
+  ]
+}
