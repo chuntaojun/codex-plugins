@@ -24,7 +24,27 @@ claude auth status
 
 ## Quick Install
 
-Run:
+Preferred install path: use the `codex-plugins` marketplace:
+
+```bash
+codex plugin marketplace add chuntaojun/codex-plugins --ref main
+```
+
+Restart Codex, then run:
+
+```text
+$claude setup
+```
+
+If your Codex build requires explicit plugin installation after adding the marketplace:
+
+```bash
+codex plugin add claude@codex-plugins
+```
+
+### Standalone Install
+
+If you only want this plugin outside the full `codex-plugins` suite, run:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/chuntaojun/claude-plugin-codex/main/install.sh | bash

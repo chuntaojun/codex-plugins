@@ -1,0 +1,14 @@
+{
+  "name": "codex-plugins-marketplace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:marketplace": "node scripts/check-marketplace.mjs",
+    "test:claude": "npm test --prefix plugins/claude-plugin-codex",
+    "test:ultracode": "npm test --prefix plugins/codex-ultracode/scripts",
+    "typecheck:ultracode": "npm run typecheck --prefix plugins/codex-ultracode/scripts",
+    "test": "npm run check:marketplace && npm run test:claude && npm run test:ultracode && npm run typecheck:ultracode",
+    "validate": "npm test"
+  }
+}

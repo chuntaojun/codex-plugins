@@ -101,12 +101,32 @@ Available tools:
 
 All MCP run tools return `inspection` with ready-to-call arguments for `ultracode_status`, `ultracode_tail`, `ultracode_report`, and `ultracode_artifact`. MCP restart/rework calls also return `inspection` when invoked with `cwd + runId`. They include generic `inspection.restartStage` / `inspection.reworkStage` templates and, when stage results are available, concrete per-stage templates in `inspection.stages[]`. Each stage entry can include `artifact` metadata for the latest attempt, including `outputFile`, `resultFile`, `attemptDir`, `stageDir`, and `sessionId`, so Codex can display or rework a stage without reconstructing artifact paths. Status, tail, report, and stage-action arguments use `cwd + runId` by default; `inspection.outputDir` is kept for audit/debug context. Dynamic runs from a plan file include `approvedPlanFile` and `inspection.approvedPlanFile`. Approved write-capable named runs include `approvedNamedWorkflowFile` and `inspection.approvedNamedWorkflowFile`, which point to `<outputDir>/approved-named-workflow.json`.
 
-## Local Codex Installation
+## Codex Installation
 
-This repository is designed to be installed as a local Codex plugin from a local marketplace. One working setup is:
+Preferred install path: use the `codex-plugins` marketplace:
 
 ```bash
-ln -s /Users/chuntao.liao/Github/ai-native/codex-ultracode /Users/chuntao.liao/plugins/codex-ultracode
+codex plugin marketplace add chuntaojun/codex-plugins --ref main
+```
+
+Restart Codex, then use the plugin with Codex's plugin mention syntax:
+
+```text
+$ultracode list available workflows
+```
+
+If your Codex build requires explicit plugin installation after adding the marketplace:
+
+```bash
+codex plugin add codex-ultracode@codex-plugins
+```
+
+### Standalone Local Development
+
+For standalone local development outside the marketplace suite, register the plugin in a local marketplace:
+
+```bash
+ln -s /path/to/codex-ultracode /Users/chuntao.liao/plugins/codex-ultracode
 codex plugin add codex-ultracode@local
 codex plugin list --marketplace local
 ```
@@ -115,7 +135,7 @@ During local development, refresh the plugin cachebuster before reinstalling:
 
 ```bash
 python3 /Users/chuntao.liao/.codex/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py \
-  /Users/chuntao.liao/Github/ai-native/codex-ultracode
+  /path/to/codex-ultracode
 
 codex plugin add codex-ultracode@local
 ```
@@ -360,5 +380,5 @@ Validate the plugin manifest:
 
 ```bash
 python3 /Users/chuntao.liao/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py \
-  /Users/chuntao.liao/Github/ai-native/codex-ultracode
+  .
 ```

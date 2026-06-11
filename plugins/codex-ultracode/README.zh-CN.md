@@ -101,12 +101,32 @@ ultracode run <workflow.json> <param.json>
 
 所有 MCP run 工具都会返回 `inspection`，里面包含可直接调用 `ultracode_status`、`ultracode_tail`、`ultracode_report`、`ultracode_artifact` 的 arguments；通过 `cwd + runId` 调用的 MCP restart/rework 也会返回 `inspection`。这些 inspection 包含通用的 `inspection.restartStage` / `inspection.reworkStage` 模板；当已有 stage 结果时，还会在 `inspection.stages[]` 里给出每个具体 stage 的 restart/rework 参数。每个 stage entry 还可以包含 latest attempt 的 `artifact` 元数据，包括 `outputFile`、`resultFile`、`attemptDir`、`stageDir` 和 `sessionId`，Codex 展示或返工某个 stage 时不需要重建产物路径。status、tail、report 和 stage action 的 arguments 默认使用 `cwd + runId`；`inspection.outputDir` 只作为审计和调试上下文保留。来自 plan file 的动态 run 会包含 `approvedPlanFile` 和 `inspection.approvedPlanFile`。已批准的 write-capable named run 会包含 `approvedNamedWorkflowFile` 和 `inspection.approvedNamedWorkflowFile`，指向 `<outputDir>/approved-named-workflow.json`。
 
-## 安装到本地 Codex
+## 安装到 Codex
 
-这个仓库可以作为本地 Codex plugin 从本地 marketplace 安装。一个已验证的安装方式是：
+推荐安装方式：通过 `codex-plugins` marketplace 安装整套插件：
 
 ```bash
-ln -s /Users/chuntao.liao/Github/ai-native/codex-ultracode /Users/chuntao.liao/plugins/codex-ultracode
+codex plugin marketplace add chuntaojun/codex-plugins --ref main
+```
+
+重启 Codex 后，用插件 mention 方式调用：
+
+```text
+$ultracode list available workflows
+```
+
+如果你的 Codex 版本在添加 marketplace 后仍要求显式安装插件：
+
+```bash
+codex plugin add codex-ultracode@codex-plugins
+```
+
+### 独立本地开发
+
+如果脱离 marketplace 套件独立开发，可把插件注册到本地 marketplace：
+
+```bash
+ln -s /path/to/codex-ultracode /Users/chuntao.liao/plugins/codex-ultracode
 codex plugin add codex-ultracode@local
 codex plugin list --marketplace local
 ```
@@ -115,7 +135,7 @@ codex plugin list --marketplace local
 
 ```bash
 python3 /Users/chuntao.liao/.codex/skills/.system/plugin-creator/scripts/update_plugin_cachebuster.py \
-  /Users/chuntao.liao/Github/ai-native/codex-ultracode
+  /path/to/codex-ultracode
 
 codex plugin add codex-ultracode@local
 ```
@@ -360,5 +380,5 @@ npm run typecheck
 
 ```bash
 python3 /Users/chuntao.liao/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py \
-  /Users/chuntao.liao/Github/ai-native/codex-ultracode
+  .
 ```

@@ -22,7 +22,27 @@ claude auth status
 
 ## 快速安装
 
-运行：
+推荐安装方式：通过 `codex-plugins` marketplace 安装整套插件：
+
+```bash
+codex plugin marketplace add chuntaojun/codex-plugins --ref main
+```
+
+重启 Codex，然后运行：
+
+```text
+$claude setup
+```
+
+如果你的 Codex 版本在添加 marketplace 后仍要求显式安装插件：
+
+```bash
+codex plugin add claude@codex-plugins
+```
+
+### 独立安装
+
+如果只想安装这个插件，而不是完整的 `codex-plugins` 套件，运行：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/chuntaojun/claude-plugin-codex/main/install.sh | bash
