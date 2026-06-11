@@ -15,7 +15,7 @@
 - [x] 新增 `CONTRIBUTING.md`
 - [x] 新增 `CHANGELOG.md`
 - [x] 运行完整验证
-- [ ] 提交并推送
+- [x] 提交并推送
 
 ## Review
 
@@ -37,3 +37,4 @@
 - 验证通过：`validate_plugin.py plugins/claude-plugin-codex`。
 - 验证通过：`validate_plugin.py plugins/codex-ultracode`。
 - 已确认 README 和任务记录中没有旧的 `codex-plugin-cc` 或旧 `codex-ultracode` 绝对路径残留。
+- 已提交并推送到 `origin/main`。
