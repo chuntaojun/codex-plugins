@@ -16,6 +16,62 @@ function readText(relativePath) {
   return fs.readFileSync(path.join(ROOT, relativePath), "utf8");
 }
 
+function createBarePluginRepo(tmp) {
+  const sourceRepo = path.join(tmp, "source.git");
+
+  if (fs.existsSync(path.join(ROOT, ".git"))) {
+    const result = spawnSync("git", ["clone", "--bare", ROOT, sourceRepo], {
+      encoding: "utf8"
+    });
+    assert.equal(result.status, 0, result.stderr);
+    return sourceRepo;
+  }
+
+  const sourceWorktree = path.join(tmp, "source-worktree");
+  fs.mkdirSync(sourceWorktree, { recursive: true });
+  fs.cpSync(ROOT, sourceWorktree, {
+    recursive: true,
+    filter: (source) => !source.includes(`${path.sep}node_modules${path.sep}`)
+  });
+
+  let result = spawnSync("git", ["init", "-b", "main"], {
+    cwd: sourceWorktree,
+    encoding: "utf8"
+  });
+  assert.equal(result.status, 0, result.stderr);
+
+  result = spawnSync("git", ["add", "-A"], {
+    cwd: sourceWorktree,
+    encoding: "utf8"
+  });
+  assert.equal(result.status, 0, result.stderr);
+
+  result = spawnSync(
+    "git",
+    [
+      "-c",
+      "user.name=Plugin Test",
+      "-c",
+      "user.email=plugin-test@example.invalid",
+      "commit",
+      "-m",
+      "Create plugin fixture"
+    ],
+    {
+      cwd: sourceWorktree,
+      encoding: "utf8"
+    }
+  );
+  assert.equal(result.status, 0, result.stderr);
+
+  result = spawnSync("git", ["clone", "--bare", sourceWorktree, sourceRepo], {
+    encoding: "utf8"
+  });
+  assert.equal(result.status, 0, result.stderr);
+
+  return sourceRepo;
+}
+
 test("plugin manifest declares the claude MCP server config", () => {
   const manifest = readJson(".codex-plugin/plugin.json");
 
@@ -68,16 +124,11 @@ test("quick install script registers the local plugin marketplace entry", () => 
 
 test("quick install script writes marketplace entry for configured install dir", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "claude-plugin-install-test-"));
-  const sourceRepo = path.join(tmp, "source.git");
+  const sourceRepo = createBarePluginRepo(tmp);
   const installDir = path.join(tmp, "home", "plugins", "claude");
   const marketplacePath = path.join(tmp, "home", ".agents", "plugins", "marketplace.json");
 
-  let result = spawnSync("git", ["clone", "--bare", ROOT, sourceRepo], {
-    encoding: "utf8"
-  });
-  assert.equal(result.status, 0, result.stderr);
-
-  result = spawnSync("bash", [path.join(ROOT, "install.sh")], {
+  const result = spawnSync("bash", [path.join(ROOT, "install.sh")], {
     cwd: tmp,
     env: {
       ...process.env,
@@ -100,7 +151,7 @@ test("quick install script writes marketplace entry for configured install dir",
 
 test("quick install script registers the home root with Codex CLI", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "claude-plugin-codex-cli-test-"));
-  const sourceRepo = path.join(tmp, "source.git");
+  const sourceRepo = createBarePluginRepo(tmp);
   const home = path.join(tmp, "home");
   const binDir = path.join(tmp, "bin");
   const codexLog = path.join(tmp, "codex-args.log");
@@ -114,12 +165,7 @@ test("quick install script registers the home root with Codex CLI", () => {
     { mode: 0o755 }
   );
 
-  let result = spawnSync("git", ["clone", "--bare", ROOT, sourceRepo], {
-    encoding: "utf8"
-  });
-  assert.equal(result.status, 0, result.stderr);
-
-  result = spawnSync("bash", [path.join(ROOT, "install.sh")], {
+  const result = spawnSync("bash", [path.join(ROOT, "install.sh")], {
     cwd: tmp,
     env: {
       ...process.env,
